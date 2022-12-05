@@ -52,7 +52,7 @@ potdObj.addPageLinks = function(){
     const rightArrowMonth = document.querySelector('.right-arrow-month')
     const leftArrowYear = document.querySelector('.left-arrow-year')
     const rightArrowYear = document.querySelector('.right-arrow-year')
-
+    const randomButton = document.querySelector('.random')
 
     calendar.addEventListener('click', () => this.updatePageCalendar())
     leftArrow.addEventListener('click', () => this.updatePageInfoButtonDay(-1))
@@ -61,6 +61,7 @@ potdObj.addPageLinks = function(){
     rightArrowMonth.addEventListener('click', () => this.updatePageInfoButtonDay(30))
     leftArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(-365))
     rightArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(365))
+    randomButton.addEventListener('click', () => this.updatePageRandom())
 
 }
 potdObj.updatePageCalendar = async function(){
@@ -87,6 +88,30 @@ potdObj.updatePageInfoButtonDay = async function(dayModifier){
     this.data = await this.getFetch(yesterdayDataApiLink)
     this.date = currentDate
     this.updatePageInfo()
+}
+potdObj.updatePageRandom = async function(){
+    apiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${this.getRandomDate()}`
+    let currentData = await this.getFetch(apiLink)
+    if(currentData.code === 404 || currentData.code === 400){
+        this.updatePageRandom()
+        return
+    }
+    this.data = currentData
+    this.date = currentData.date
+    this.updatePageInfo()
+}
+potdObj.getRandomDate = function(){
+    let date, month, year
+    let today = new Date()
+    let yearDiff = today.getUTCFullYear() - 1995
+    date = Math.ceil(Math.random() * 31)
+    month = Math.ceil(Math.random() * 12)
+    year = Math.ceil(Math.random() * yearDiff + 1995)
+
+    date = String(date).padStart(2, 0)
+    month = String(month).padStart(2, 0)
+
+    return `${year}-${month}-${date}`
 }
 potdObj.isDateValid = function(currentDate) {
 
