@@ -1,5 +1,6 @@
 const potdObj = {}
 potdObj.apiKey = 'api_key=qlz0oRxjRfsTf4bFs7tVdxnnenlpdpuC6p8wwhLM'
+potdObj.todayDate = null
 potdObj.date = null
 potdObj.data = null
 potdObj.getFetch = async function(url){
@@ -56,7 +57,11 @@ potdObj.updatePageCalendar = async function(){
     let date = calendar.value
     const apiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${date}`
     this.data = await this.getFetch(apiLink)
-    this.date = new Date(this.data.date)
+    let newDate = new Date(this.data.date)
+    if (!this.isDateValid(newDate)) {
+        return
+    }
+    this.date = newDate
     this.updatePageInfo()
 }
 potdObj.updatePageInfoButton = async function(parameter){
@@ -76,6 +81,9 @@ potdObj.updatePageInfoButton = async function(parameter){
 
     let currentDate = this.date
     currentDate.setDate(currentDate.getDate() + dayModifier)
+    if (!this.isDateValid(currentDate)) {
+        return
+    }
     const yesterdayDateApiFormat = `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth() + 1}-${String(currentDate.getUTCDate()).padStart(2, '0')}`
     const yesterdayDataApiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${yesterdayDateApiFormat}`
 
@@ -84,11 +92,18 @@ potdObj.updatePageInfoButton = async function(parameter){
     this.updatePageInfo()
     console.log(this.data)
 }
-
+potdObj.isDateValid = function(currentDate) {
+    if (currentDate - this.todayDate <= 0){
+        return true
+    } else {
+        return false
+    }
+}
 potdObj.main = async function(){
     const url = `https://api.nasa.gov/planetary/apod?${this.apiKey}`
     this.data = await this.getFetch(url)
     this.date = new Date(this.data.date)
+    this.todayDate = new Date(JSON.parse(JSON.stringify(this.date)))
     this.addPageLinks()
     this.updatePageInfo()
 }
