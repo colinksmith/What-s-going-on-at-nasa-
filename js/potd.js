@@ -37,6 +37,7 @@ potdObj.updatePageCalendar = async function(){
     let date = calendar.value
     const apiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${date}`
     const data = await this.getFetch(apiLink)
+    this.date = new Date(data.date)
     this.updatePageInfo(data)
 }
 potdObj.updatePageInfoButton = async function(parameter){
