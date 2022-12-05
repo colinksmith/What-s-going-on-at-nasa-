@@ -1,6 +1,7 @@
 const potdObj = {}
 potdObj.apiKey = 'api_key=qlz0oRxjRfsTf4bFs7tVdxnnenlpdpuC6p8wwhLM'
 potdObj.date = null
+potdObj.data = null
 potdObj.getFetch = async function(url){
     try{
         const response = await fetch(url)
@@ -10,18 +11,18 @@ potdObj.getFetch = async function(url){
         console.warn(error)
     }
 }
-potdObj.updatePageInfo = function(data){
+potdObj.updatePageInfo = function(){
     const imgMain = document.querySelector('.img-main')
     const imgLink = document.querySelector('.img-link')
     const potdText = document.querySelector('.potd-text')
     const potdTitle = document.querySelector('.potd-title')
     const potdDate = document.querySelector('.arrow-container .today-date')
 
-    imgMain.src = data.hdurl
-    imgLink.href = data.url
-    potdText.textContent = data.explanation
-    potdTitle.textContent = data.title
-    potdDate.textContent = data.date
+    imgMain.src = this.data.hdurl
+    imgLink.href = this.data.url
+    potdText.textContent = this.data.explanation
+    potdTitle.textContent = this.data.title
+    potdDate.textContent = this.data.date
 }
 potdObj.addPageLinks = function(){
     const leftArrow = document.querySelector('.left-arrow')
@@ -36,9 +37,9 @@ potdObj.updatePageCalendar = async function(){
     const calendar = document.querySelector('.calendarInput')
     let date = calendar.value
     const apiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${date}`
-    const data = await this.getFetch(apiLink)
-    this.date = new Date(data.date)
-    this.updatePageInfo(data)
+    this.data = await this.getFetch(apiLink)
+    this.date = new Date(this.data.date)
+    this.updatePageInfo()
 }
 potdObj.updatePageInfoButton = async function(parameter){
     let dayModifier = null
@@ -60,19 +61,20 @@ potdObj.updatePageInfoButton = async function(parameter){
     const yesterdayDateApiFormat = `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth() + 1}-${String(currentDate.getUTCDate()).padStart(2, '0')}`
     const yesterdayDataApiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${yesterdayDateApiFormat}`
 
-    const yesterdayData = await this.getFetch(yesterdayDataApiLink)
+    this.data = await this.getFetch(yesterdayDataApiLink)
 
-    this.updatePageInfo(yesterdayData)
+    this.updatePageInfo()
+}
+potdObj.updatePagePicOrVid = function(){
+
 }
 potdObj.main = async function(){
     const url = `https://api.nasa.gov/planetary/apod?${this.apiKey}`
-    let data = await this.getFetch(url)
-    this.date = new Date(data.date)
-    console.log(data)
+    this.data = await this.getFetch(url)
+    this.date = new Date(this.data.date)
+    console.log(this.data)
     console.log(this.date)
     this.addPageLinks()
-    this.updatePageInfo(data)
-
-
+    this.updatePageInfo()
 }
 potdObj.main()
