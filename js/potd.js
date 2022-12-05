@@ -76,7 +76,7 @@ potdObj.updatePageCalendar = async function(){
     this.updatePageInfo()
 }
 potdObj.updatePageInfoButtonDay = async function(dayModifier){
-    let currentDate = this.date
+    let currentDate = new Date(this.date.valueOf())
     currentDate.setDate(currentDate.getDate() + dayModifier)
     if (!this.isDateValid(currentDate)) {
         return
@@ -85,16 +85,28 @@ potdObj.updatePageInfoButtonDay = async function(dayModifier){
     const yesterdayDataApiLink = `https://api.nasa.gov/planetary/apod?${this.apiKey}&date=${yesterdayDateApiFormat}`
 
     this.data = await this.getFetch(yesterdayDataApiLink)
-
+    this.date = currentDate
     this.updatePageInfo()
 }
 potdObj.isDateValid = function(currentDate) {
+
     if (!(currentDate - this.todayDate <= 0)){
+        this.displayError()
         return false
     } else if (!(currentDate - this.firstDate >= 0)){
+        this.displayError()
         return false
     }
+    this.clearError()
     return true
+}
+potdObj.displayError = function(){
+    let textBox = document.querySelector('.error')
+    textBox.textContent = 'Error, something went wrong with that date. There may be no picture for that date.'
+}
+potdObj.clearError = function(){
+    let textBox = document.querySelector('.error')
+    textBox.textContent = ''
 }
 potdObj.main = async function(){
     const url = `https://api.nasa.gov/planetary/apod?${this.apiKey}`

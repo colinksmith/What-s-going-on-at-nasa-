@@ -48,13 +48,16 @@ body{
 .hidden-media{
   height: 0;
 }
-
 .potd-text{
   padding: 1em;
 }
 iframe{
   height: 720px;
   width: 1280px;
+}
+
+.error{
+  color: red;
 }
 
 /******************************************
