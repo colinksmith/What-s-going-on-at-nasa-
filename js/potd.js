@@ -44,13 +44,23 @@ potdObj.updatePageInfo = function(){
 }
 
 potdObj.addPageLinks = function(){
+    const calendar = document.querySelector('.calendar')
     const leftArrow = document.querySelector('.left-arrow')
     const rightArrow = document.querySelector('.right-arrow')
-    const calendar = document.querySelector('.calendar')
+    const leftArrowMonth = document.querySelector('.left-arrow-month')
+    const rightArrowMonth = document.querySelector('.right-arrow-month')
+    const leftArrowYear = document.querySelector('.left-arrow-year')
+    const rightArrowYear = document.querySelector('.right-arrow-year')
 
-    leftArrow.addEventListener('click', () => this.updatePageInfoButton('yesterday'))
-    rightArrow.addEventListener('click', () => this.updatePageInfoButton('tomorrow')) 
+
     calendar.addEventListener('click', () => this.updatePageCalendar())
+    leftArrow.addEventListener('click', () => this.updatePageInfoButtonDay(-1))
+    rightArrow.addEventListener('click', () => this.updatePageInfoButtonDay(1)) 
+    leftArrowMonth.addEventListener('click', () => this.updatePageInfoButtonDay(-30))
+    rightArrowMonth.addEventListener('click', () => this.updatePageInfoButtonDay(30))
+    leftArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(-365))
+    rightArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(365))
+
 }
 potdObj.updatePageCalendar = async function(){
     const calendar = document.querySelector('.calendarInput')
@@ -64,21 +74,7 @@ potdObj.updatePageCalendar = async function(){
     this.date = newDate
     this.updatePageInfo()
 }
-potdObj.updatePageInfoButton = async function(parameter){
-    let dayModifier = null
-    switch (parameter){
-        case 'tomorrow':
-        case 1:
-            dayModifier = 1
-            break
-        case 'yesterday':
-        case -1:
-            dayModifier = -1
-            break
-        default:
-            console.log('something went wrong')
-    }
-
+potdObj.updatePageInfoButtonDay = async function(dayModifier){
     let currentDate = this.date
     currentDate.setDate(currentDate.getDate() + dayModifier)
     if (!this.isDateValid(currentDate)) {
@@ -90,10 +86,9 @@ potdObj.updatePageInfoButton = async function(parameter){
     this.data = await this.getFetch(yesterdayDataApiLink)
 
     this.updatePageInfo()
-    console.log(this.data)
 }
 potdObj.isDateValid = function(currentDate) {
-    if (currentDate - this.todayDate <= 0){
+    if (currentDate - this.todayDate <= 0 ){
         return true
     } else {
         return false
