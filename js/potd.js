@@ -17,13 +17,31 @@ potdObj.updatePageInfo = function(){
     const potdText = document.querySelector('.potd-text')
     const potdTitle = document.querySelector('.potd-title')
     const potdDate = document.querySelector('.arrow-container .today-date')
+    const vid = document.querySelector('iframe')
 
-    imgMain.src = this.data.hdurl
-    imgLink.href = this.data.url
+
     potdText.textContent = this.data.explanation
     potdTitle.textContent = this.data.title
     potdDate.textContent = this.data.date
+
+    if (this.data.media_type === "video") {
+        vid.classList.add('active-media')
+        vid.classList.remove('hidden-media')
+        imgMain.classList.remove('active-media')
+        imgMain.classList.add('hidden-media')
+
+        vid.src = this.data.url
+    } else if (this.data.media_type === "image"){
+        vid.classList.remove('active-media')
+        vid.classList.add('hidden-media')
+        imgMain.classList.add('active-media')
+        imgMain.classList.remove('hidden-media')
+
+        imgMain.src = this.data.hdurl
+        imgLink.href = this.data.url
+    }
 }
+
 potdObj.addPageLinks = function(){
     const leftArrow = document.querySelector('.left-arrow')
     const rightArrow = document.querySelector('.right-arrow')
@@ -64,16 +82,13 @@ potdObj.updatePageInfoButton = async function(parameter){
     this.data = await this.getFetch(yesterdayDataApiLink)
 
     this.updatePageInfo()
+    console.log(this.data)
 }
-potdObj.updatePagePicOrVid = function(){
 
-}
 potdObj.main = async function(){
     const url = `https://api.nasa.gov/planetary/apod?${this.apiKey}`
     this.data = await this.getFetch(url)
     this.date = new Date(this.data.date)
-    console.log(this.data)
-    console.log(this.date)
     this.addPageLinks()
     this.updatePageInfo()
 }
