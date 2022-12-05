@@ -3,6 +3,7 @@ potdObj.apiKey = 'api_key=qlz0oRxjRfsTf4bFs7tVdxnnenlpdpuC6p8wwhLM'
 potdObj.todayDate = null
 potdObj.date = null
 potdObj.data = null
+potdObj.firstDate = new Date('June 15 1995 12')
 potdObj.getFetch = async function(url){
     try{
         const response = await fetch(url)
@@ -88,18 +89,20 @@ potdObj.updatePageInfoButtonDay = async function(dayModifier){
     this.updatePageInfo()
 }
 potdObj.isDateValid = function(currentDate) {
-    if (currentDate - this.todayDate <= 0 ){
-        return true
-    } else {
+    if (!(currentDate - this.todayDate <= 0)){
+        return false
+    } else if (!(currentDate - this.firstDate >= 0)){
         return false
     }
+    return true
 }
 potdObj.main = async function(){
     const url = `https://api.nasa.gov/planetary/apod?${this.apiKey}`
     this.data = await this.getFetch(url)
     this.date = new Date(this.data.date)
-    this.todayDate = new Date(JSON.parse(JSON.stringify(this.date)))
+    this.todayDate = new Date(this.date.valueOf())
     this.addPageLinks()
     this.updatePageInfo()
+    console.log(this.firstDate)
 }
 potdObj.main()
