@@ -69,9 +69,7 @@ earthNowObj.updatePageCalendar = async function(){
     if (!this.isDateValid(tempDataList)) {
         return
     }
-    this.currentDataList = tempDataList
-    this.currentDataView = this.currentDataList[0]
-    this.currentDate = new Date(this.currentDataList[0].date)
+    this.updateObjData(tempDataList)
     console.log(this.currentDataList[0].date)
     this.updatePageInfo()
 }
@@ -91,16 +89,52 @@ earthNowObj.clearError = function(){
     let textBox = document.querySelector('.error')
     textBox.textContent = ''
 }
+earthNowObj.updateObjData = function(tempDataList){
+    this.currentDataList = tempDataList
+    this.currentDataView = this.currentDataList[0]
+    this.currentDate = new Date(this.currentDataList[0].date)
+}
+earthNowObj.createAllViewSections = function(){
+    for (let i = 0; i < this.currentDataList.length; i++){
+        this.createViewSection()
+    }
+}
+earthNowObj.createViewSection = function(){
+    const viewHolder = document.querySelector('.view-holder')
+
+    const section = document.createElement('section')
+    const aEle = document.createElement('a')
+    const imgEle = document.createElement('img')
+    const spanEle = document.createElement('span')
+
+    const viewNum = viewHolder.children.length
+
+    section.appendChild(aEle)
+    section.classList.add(`view-${viewNum}`)
+    if (section.classList.contains(`view-${this.currentView}`)){
+        section.classList.add('active-view')
+    }
+
+    aEle.appendChild(imgEle)
+    const apiDateFormat = `${earthNowObj.currentDate.getFullYear()}/${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}/${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
+    imgEle.src = `https://api.nasa.gov/EPIC/archive/natural/${apiDateFormat}/jpg/${this.currentDataList[viewNum].image}.jpg?${this.apiKey}`
+    
+    section.appendChild(spanEle)
+    console.log(this.currentDataList[viewNum])
+    spanEle.textContent = this.currentDataList[viewNum].date.slice(11)
+
+    viewHolder.appendChild(section)
+}
 earthNowObj.main = async function(){
     const url = `https://api.nasa.gov/EPIC/api/natural/?${this.apiKey}`
     this.todayDate = new Date()
     this.currentView = 0
-    this.currentDataList = await this.getFetch(url)
-    this.currentDataView = this.currentDataList[0] 
-    this.currentDate = new Date(this.currentDataList[0].date)
+    tempDataList = await this.getFetch(url)
+    this.updateObjData(tempDataList)
     this.addPageLinks()
     this.updatePageInfo()
     console.log(this.currentDataView)
+    this.createAllViewSections()
 }
 earthNowObj.main()
 
