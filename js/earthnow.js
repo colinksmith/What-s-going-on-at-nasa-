@@ -70,8 +70,9 @@ earthNowObj.updatePageCalendar = async function(){
         return
     }
     this.updateObjData(tempDataList)
-    console.log(this.currentDataList[0].date)
+    console.log(this.currentDataList[this.currentView].date)
     this.updatePageInfo()
+    this.createAllViewSections()
 }
 earthNowObj.isDateValid = function(currentData) {
     if (currentData.length === 0){
@@ -95,11 +96,18 @@ earthNowObj.updateObjData = function(tempDataList){
     this.currentDate = new Date(this.currentDataList[0].date)
 }
 earthNowObj.createAllViewSections = function(){
-    for (let i = 0; i < this.currentDataList.length; i++){
-        this.createViewSection()
-    }
+    const viewHolder = document.querySelector('.view-holder')
+    
+    viewHolder.replaceChildren(...(this.createViewSectionArr()))
 }
-earthNowObj.createViewSection = function(){
+earthNowObj.createViewSectionArr = function(){
+    const output = []
+    for (let i = 0; i < this.currentDataList.length; i++){
+        output.push(this.createViewSection(i))
+    }
+    return output
+}
+earthNowObj.createViewSection = function(index){
     const viewHolder = document.querySelector('.view-holder')
 
     const section = document.createElement('section')
@@ -107,7 +115,7 @@ earthNowObj.createViewSection = function(){
     const imgEle = document.createElement('img')
     const spanEle = document.createElement('span')
 
-    const viewNum = viewHolder.children.length
+    const viewNum = index
 
     section.appendChild(aEle)
     section.classList.add(`view-${viewNum}`)
@@ -118,12 +126,20 @@ earthNowObj.createViewSection = function(){
     aEle.appendChild(imgEle)
     const apiDateFormat = `${earthNowObj.currentDate.getFullYear()}/${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}/${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
     imgEle.src = `https://api.nasa.gov/EPIC/archive/natural/${apiDateFormat}/jpg/${this.currentDataList[viewNum].image}.jpg?${this.apiKey}`
+    imgEle.addEventListener('click', () => this.changeView(viewNum))
     
     section.appendChild(spanEle)
-    console.log(this.currentDataList[viewNum])
     spanEle.textContent = this.currentDataList[viewNum].date.slice(11)
 
-    viewHolder.appendChild(section)
+    return section
+}
+earthNowObj.changeView = function(viewNum){
+    const currentActiveSection = document.querySelector('.active-view')
+    currentActiveSection.classList.remove('active-view')
+    document.querySelector(`.view-${viewNum}`).classList.add('active-view')
+    this.currentDataView = this.currentDataList[viewNum]
+    this.currentView = viewNum
+    this.updatePageInfo()
 }
 earthNowObj.main = async function(){
     const url = `https://api.nasa.gov/EPIC/api/natural/?${this.apiKey}`
@@ -133,7 +149,7 @@ earthNowObj.main = async function(){
     this.updateObjData(tempDataList)
     this.addPageLinks()
     this.updatePageInfo()
-    console.log(this.currentDataView)
+    console.log(this.currentDataList)
     this.createAllViewSections()
 }
 earthNowObj.main()
