@@ -7,8 +7,6 @@ earthNowObj.currentDataView = null
 earthNowObj.currentView = null
 earthNowObj.firstDate = new Date('June 15 1995 12')
 
-//separate into dateData, viewData
-
 earthNowObj.getFetch = async function(url){
     try{
         const response = await fetch(url)
@@ -66,9 +64,23 @@ earthNowObj.updatePageInfo = function(){
 
 
 }
+earthNowObj.updatePageInfoButtonDay = async function(numberOfDays){
+    let currentDate = this.currentDate
+    currentDate.setDate(currentDate.getDate() + numberOfDays)
+    const apiDateDashes = `${earthNowObj.currentDate.getFullYear()}-${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}-${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
+    const apiLink = `https://api.nasa.gov/EPIC/api/natural/date/${apiDateDashes}?${this.apiKey}`
+    tempDataList = await this.getFetch(apiLink)
+    if (!this.isDateValid(tempDataList)) {
+        return
+    }
+    this.updateObjData(tempDataList)
+    this.updatePageInfo()
+    this.createAllViewSections()
+}
 earthNowObj.updatePageCalendar = async function(){
     const calendar = document.querySelector('.calendarInput')
     let date = calendar.value
+    console.log(date)
     const apiLink = `https://api.nasa.gov/EPIC/api/natural/date/${date}?${this.apiKey}`
     tempDataList = await this.getFetch(apiLink)
     if (!this.isDateValid(tempDataList)) {
@@ -96,7 +108,6 @@ earthNowObj.clearError = function(){
 }
 earthNowObj.updateObjData = function(tempDataList){
     this.currentDataList = tempDataList
-    console.log(this.currentView)
     this.currentDataView = this.currentDataList[this.currentView]
     this.currentDate = new Date(this.currentDataList[0].date)
 }
@@ -162,11 +173,3 @@ earthNowObj.main = async function(){
 }
 earthNowObj.main()
 
-
-// pseudocode:
-// search /available for most recent
-//     let mostRecent =
-// let earthNowObj.data = getFetch(mostRecent)
-//     let imgHref = earthNowObj.data[0].image
-
-//     let apiDate = `${this.todayDate.getUTCFullYear()}-${this.todayDate.getUTCMonth() + 1}-${String(this.todayDate.getUTCDate()).padStart(2, '0')}`
