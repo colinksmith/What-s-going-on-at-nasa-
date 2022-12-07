@@ -140,6 +140,5 @@ potdObj.main = async function(){
     this.todayDate = new Date(this.date.valueOf())
     this.addPageLinks()
     this.updatePageInfo()
-    console.log(this.firstDate)
 }
 potdObj.main()

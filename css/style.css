@@ -56,10 +56,21 @@ iframe{
   width: 1280px;
 }
 
+/* error */
 .error{
   color: red;
 }
 
+
+.main-content-holder{
+  display: flex;
+}
+.coords-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 /******************************************
 /* ADDITIONAL STYLES
 /*******************************************/
