@@ -50,6 +50,11 @@ earthNowObj.updatePageInfo = function(){
 
     const apiDateFormat = `${earthNowObj.currentDate.getFullYear()}/${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}/${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
 
+    if (this.currentView >= this.currentDataList.length) {
+        this.currentView = this.currentDataList.length - 1
+        this.currentDataView = this.currentDataList[this.currentView]
+    }
+
     let currentViewUrl = `https://api.nasa.gov/EPIC/archive/natural/${apiDateFormat}/jpg/${this.currentDataView.image}.jpg?${this.apiKey}`
     imgMain.src = currentViewUrl
     imgLink.href = currentViewUrl
@@ -70,7 +75,6 @@ earthNowObj.updatePageCalendar = async function(){
         return
     }
     this.updateObjData(tempDataList)
-    console.log(this.currentDataList[this.currentView].date)
     this.updatePageInfo()
     this.createAllViewSections()
 }
@@ -92,7 +96,8 @@ earthNowObj.clearError = function(){
 }
 earthNowObj.updateObjData = function(tempDataList){
     this.currentDataList = tempDataList
-    this.currentDataView = this.currentDataList[0]
+    console.log(this.currentView)
+    this.currentDataView = this.currentDataList[this.currentView]
     this.currentDate = new Date(this.currentDataList[0].date)
 }
 earthNowObj.createAllViewSections = function(){
@@ -135,7 +140,9 @@ earthNowObj.createViewSection = function(index){
 }
 earthNowObj.changeView = function(viewNum){
     const currentActiveSection = document.querySelector('.active-view')
-    currentActiveSection.classList.remove('active-view')
+    if (currentActiveSection){
+        currentActiveSection.classList.remove('active-view')
+    }
     document.querySelector(`.view-${viewNum}`).classList.add('active-view')
     this.currentDataView = this.currentDataList[viewNum]
     this.currentView = viewNum
@@ -151,6 +158,7 @@ earthNowObj.main = async function(){
     this.updatePageInfo()
     console.log(this.currentDataList)
     this.createAllViewSections()
+    this.changeView(this.currentView)
 }
 earthNowObj.main()
 
