@@ -93,22 +93,23 @@ earthNowObj.updatePageCalendar = async function(){
 }
 earthNowObj.isDateValid = function(tempDate) {
     if (tempDate - new Date(this.validDates[0].date) > 0){
-        this.displayError()
+        displayError()
         return false
     } else if (this.firstDate - tempDate > 0){
-        this.displayError()
+        displayError()
         return false
     }
-    this.clearError()
+    clearError()
     return true
-}
-earthNowObj.displayError = function(){
-    let textBox = document.querySelector('.error')
-    textBox.textContent = 'Error, something went wrong with that date. There may be no picture for that date.'
-}
-earthNowObj.clearError = function(){
-    let textBox = document.querySelector('.error')
-    textBox.textContent = ''
+
+    function displayError(){
+        let textBox = document.querySelector('.error')
+        textBox.textContent = 'Error, something went wrong with that date. There may be no picture for that date.'
+    }
+    function clearError(){
+        let textBox = document.querySelector('.error')
+        textBox.textContent = ''
+    }
 }
 earthNowObj.updateObjData = function(tempDataList){
     this.currentDataList = tempDataList
@@ -128,8 +129,6 @@ earthNowObj.createViewSectionArr = function(){
     return output
 }
 earthNowObj.createViewSection = function(index){
-    const viewHolder = document.querySelector('.view-holder')
-
     const section = document.createElement('section')
     const aEle = document.createElement('a')
     const imgEle = document.createElement('img')
@@ -191,7 +190,3 @@ earthNowObj.main = async function(){
     // console.log(this.getValidDate(-1))
 }
 earthNowObj.main()
-
-// yesterday/tomorrow buttons don't work for dates that aren't filled in eg half of 2019.
-// Need to make a new method that returns the next valid date.
-// take array of available dates, filter to the month and then return the one + 1 or - 1?
