@@ -5,7 +5,8 @@ earthNowObj.currentDate = null
 earthNowObj.currentDataList = null
 earthNowObj.currentDataView = null
 earthNowObj.currentView = null
-earthNowObj.firstDate = new Date('June 15 1995 12')
+earthNowObj.firstDate = new Date('2015-06-13')
+earthNowObj.validDates = null
 
 earthNowObj.getFetch = async function(url){
     try{
@@ -65,14 +66,14 @@ earthNowObj.updatePageInfo = function(){
 
 }
 earthNowObj.updatePageInfoButtonDay = async function(numberOfDays){
-    let currentDate = this.currentDate
-    currentDate.setDate(currentDate.getDate() + numberOfDays)
-    const apiDateDashes = `${earthNowObj.currentDate.getFullYear()}-${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}-${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
-    const apiLink = `https://api.nasa.gov/EPIC/api/natural/date/${apiDateDashes}?${this.apiKey}`
-    tempDataList = await this.getFetch(apiLink)
-    if (!this.isDateValid(tempDataList)) {
+    let tempDate = new Date(this.currentDate.getTime())
+    tempDate.setDate(tempDate.getDate() + numberOfDays)
+    if (!this.isDateValid(tempDate)) {
         return
     }
+    const validFormattedDate = this.getValidDate(tempDate, numberOfDays)
+    const apiLink = `https://api.nasa.gov/EPIC/api/natural/date/${validFormattedDate}?${this.apiKey}`
+    tempDataList = await this.getFetch(apiLink)
     this.updateObjData(tempDataList)
     this.updatePageInfo()
     this.createAllViewSections()
@@ -90,8 +91,11 @@ earthNowObj.updatePageCalendar = async function(){
     this.updatePageInfo()
     this.createAllViewSections()
 }
-earthNowObj.isDateValid = function(currentData) {
-    if (currentData.length === 0){
+earthNowObj.isDateValid = function(tempDate) {
+    if (tempDate - new Date(this.validDates[0].date) > 0){
+        this.displayError()
+        return false
+    } else if (this.firstDate - tempDate > 0){
         this.displayError()
         return false
     }
@@ -109,7 +113,7 @@ earthNowObj.clearError = function(){
 earthNowObj.updateObjData = function(tempDataList){
     this.currentDataList = tempDataList
     this.currentDataView = this.currentDataList[this.currentView]
-    this.currentDate = new Date(this.currentDataList[0].date)
+    this.currentDate = new Date(this.currentDataList[this.currentView].date)
 }
 earthNowObj.createAllViewSections = function(){
     const viewHolder = document.querySelector('.view-holder')
@@ -159,6 +163,19 @@ earthNowObj.changeView = function(viewNum){
     this.currentView = viewNum
     this.updatePageInfo()
 }
+earthNowObj.getValidDate = function(tempDate, numberOfDays){
+    let tomorrowOrYesterday = numberOfDays > 0 ? 1 : -1
+    // let tempDate = new Date(this.currentDate.getTime())
+    let targetDateFormat = `${tempDate.getFullYear()}-${String(tempDate.getMonth() + 1).padStart(2, '0')}-${String(tempDate.getDate()).padStart(2, '0')}`
+    const currentDateFormat = `${this.currentDate.getFullYear()}-${String(this.currentDate.getMonth() + 1).padStart(2, '0')}-${String(this.currentDate.getDate()).padStart(2, '0')}`
+    while (!this.validDates.filter(ele => ele.date === targetDateFormat).length){
+        tempDate.setDate(tempDate.getDate() + tomorrowOrYesterday)
+        targetDateFormat = `${tempDate.getFullYear()}-${String(tempDate.getMonth() + 1).padStart(2, '0')}-${String(tempDate.getDate()).padStart(2, '0')}`
+    }
+    console.log(this.currentDate)
+    console.log(targetDateFormat, currentDateFormat)
+    return targetDateFormat
+}
 earthNowObj.main = async function(){
     const url = `https://api.nasa.gov/EPIC/api/natural/?${this.apiKey}`
     this.todayDate = new Date()
@@ -170,6 +187,11 @@ earthNowObj.main = async function(){
     console.log(this.currentDataList)
     this.createAllViewSections()
     this.changeView(this.currentView)
+    this.validDates = await this.getFetch(`https://api.nasa.gov/EPIC/api/natural/all?${this.apiKey}`)
+    // console.log(this.getValidDate(-1))
 }
 earthNowObj.main()
 
+// yesterday/tomorrow buttons don't work for dates that aren't filled in eg half of 2019.
+// Need to make a new method that returns the next valid date.
+// take array of available dates, filter to the month and then return the one + 1 or - 1?
