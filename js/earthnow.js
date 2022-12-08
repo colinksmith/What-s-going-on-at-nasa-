@@ -113,7 +113,7 @@ earthNowObj.clearError = function(){
 earthNowObj.updateObjData = function(tempDataList){
     this.currentDataList = tempDataList
     this.currentDataView = this.currentDataList[this.currentView]
-    this.currentDate = new Date(this.currentDataList[this.currentView].date)
+    this.currentDate = new Date(this.currentDataList[0].date)
 }
 earthNowObj.createAllViewSections = function(){
     const viewHolder = document.querySelector('.view-holder')
