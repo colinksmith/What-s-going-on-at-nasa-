@@ -27,14 +27,14 @@ earthNowObj.addPageLinks = function(){
     const rightArrowYear = document.querySelector('.right-arrow-year')
     const randomButton = document.querySelector('.random')
 
-    calendar.addEventListener('click', () => this.updatePageCalendar())
-    leftArrow.addEventListener('click', () => this.updatePageInfoButtonDay(-1))
-    rightArrow.addEventListener('click', () => this.updatePageInfoButtonDay(1)) 
-    leftArrowMonth.addEventListener('click', () => this.updatePageInfoButtonDay(-30))
-    rightArrowMonth.addEventListener('click', () => this.updatePageInfoButtonDay(30))
-    leftArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(-365))
-    rightArrowYear.addEventListener('click', () => this.updatePageInfoButtonDay(365))
-    randomButton.addEventListener('click', () => this.updatePageRandom())
+    calendar.addEventListener('click', () => this.updatePageByCalendar())
+    leftArrow.addEventListener('click', () => this.updatePageInfoByButtonDay(-1))
+    rightArrow.addEventListener('click', () => this.updatePageInfoByButtonDay(1)) 
+    leftArrowMonth.addEventListener('click', () => this.updatePageInfoByButtonDay(-30))
+    rightArrowMonth.addEventListener('click', () => this.updatePageInfoByButtonDay(30))
+    leftArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(-365))
+    rightArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(365))
+    randomButton.addEventListener('click', () => this.updatePageByRandom())
 
 }
 earthNowObj.updatePageInfo = function(){
@@ -65,7 +65,7 @@ earthNowObj.updatePageInfo = function(){
 
 
 }
-earthNowObj.updatePageInfoButtonDay = async function(numberOfDays){
+earthNowObj.updatePageInfoByButtonDay = async function(numberOfDays){
     let tempDate = new Date(this.currentDate.getTime())
     tempDate.setDate(tempDate.getDate() + numberOfDays)
     if (!this.isDateValid(tempDate)) {
@@ -78,7 +78,7 @@ earthNowObj.updatePageInfoButtonDay = async function(numberOfDays){
     this.updatePageInfo()
     this.createAllViewSections()
 }
-earthNowObj.updatePageCalendar = async function(){
+earthNowObj.updatePageByCalendar = async function(){
     const calendar = document.querySelector('.calendarInput')
     let date = calendar.value
     console.log(date)
