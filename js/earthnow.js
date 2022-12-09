@@ -91,6 +91,19 @@ earthNowObj.updatePageByCalendar = async function(){
     this.updatePageInfo()
     this.createAllViewSections()
 }
+earthNowObj.updatePageByRandom = async function(){
+    let formattedDate = this.validDates[Math.floor(Math.random() * this.validDates.length)].date
+    console.log(formattedDate)
+    const apiLink = `https://api.nasa.gov/EPIC/api/natural/date/${formattedDate}?${this.apiKey}`
+    tempDataList = await this.getFetch(apiLink)
+    if (!this.isDateValid(tempDataList)) {
+        return
+    }
+    this.updateObjData(tempDataList)
+    this.currentView = Math.floor(Math.random() * this.currentDataList.length)
+    this.updatePageInfo()
+    this.createAllViewSections()
+}
 earthNowObj.isDateValid = function(tempDate) {
     if (tempDate - new Date(this.validDates[0].date) > 0){
         displayError()
@@ -190,3 +203,5 @@ earthNowObj.main = async function(){
     // console.log(this.getValidDate(-1))
 }
 earthNowObj.main()
+
+//trivialTest
