@@ -23,6 +23,8 @@ roverPhotosObj.updateObjData = function(tempDataList){
     this.currentDataList = latestOrPhotos
     this.currentCamera = this.currentDataList[0].camera.name.toLowerCase()
     this.currentPhoto = this.currentDataList[0]
+    this.sortCurrentData()
+
 }
 roverPhotosObj.addPageLinks = function(){
     const calendar = document.querySelector('.calendar')
@@ -67,6 +69,25 @@ roverPhotosObj.addPageLinks = function(){
     rhaz.addEventListener('click', () => this.updateCameraTo('rhaz'))
 
 }
+roverPhotosObj.updatePageByCalendar = async function(){
+    const calendar = document.querySelector('.calendarInput')
+    let date = calendar.value || this.todayEarthDate
+    console.log(date)
+    const apiLink = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${this.apiKey}&earth_date=${date}`
+    tempDataList = await this.getFetch(apiLink)
+    if (tempDataList.photos.length === 0){
+        this.displayError()
+        return
+    } else {
+        this.clearError()
+    }
+    console.log(tempDataList)
+    this.updateObjData(tempDataList)
+    this.updatePageInfo()
+}
+roverPhotosObj.updatePageInfoByButtonDay = async function(){
+
+}
 roverPhotosObj.updateImageBy = function(numberOfDays){
     if (this.currentPhotoIndex + numberOfDays < 0){
         this.displayError()
@@ -92,7 +113,6 @@ roverPhotosObj.updateCameraTo = function(cameraSelection){
     this.currentCamera = cameraSelection
     this.appendPhotos()
 }
-
 roverPhotosObj.updatePageInfo = function(){
     const imgMain = document.querySelector('.img-main')
     const imgLink = document.querySelector('.img-link')
@@ -111,6 +131,12 @@ roverPhotosObj.updatePageInfo = function(){
     cameraElement.textContent = `Camera: ${this.currentPhoto.camera.full_name}`
 
     this.appendPhotos()
+}
+roverPhotosObj.updatePhoto = function(index){
+    this.clearError()
+    this.currentPhoto = this.currentDataSorted[this.currentCamera][index]
+    this.currentPhotoIndex = index
+    this.updatePageInfo()
 }
 roverPhotosObj.appendPhotos = function(){
     const photoHolder = document.querySelector('.photo-holder')
@@ -138,18 +164,6 @@ roverPhotosObj.createPhotoElement = function(index){
     span.textContent = index
     return section
 }
-roverPhotosObj.updatePhoto = function(index){
-    this.clearError()
-    this.currentPhoto = this.currentDataSorted[this.currentCamera][index]
-    this.currentPhotoIndex = index
-    this.updatePageInfo()
-}
-roverPhotosObj.toggleActiveCameras = function(){
-    console.log('toggled cameras')
-}
-roverPhotosObj.changeView = function(){
-    console.log('changed view')
-}
 roverPhotosObj.sortCurrentData = function(){
     this.currentDataSorted = {}
     this.currentDataList.forEach(element => {
@@ -174,14 +188,11 @@ roverPhotosObj.main = async function(){
     tempDataList = await this.getFetch(url)
     console.log(tempDataList)
     this.updateObjData(tempDataList)
-    this.sortCurrentData()
     
     this.todaySol = this.currentDataList[0].sol
+    this.todayEarthDate = this.currentDataList[0].earth_date
     this.addPageLinks()
     this.updatePageInfo()
-
-    this.toggleActiveCameras()
-    this.changeView(this.currentView)
 
 }
 roverPhotosObj.main()
