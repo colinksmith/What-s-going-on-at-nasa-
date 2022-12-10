@@ -62,8 +62,6 @@ earthNowObj.updatePageInfo = function(){
     timeElement.textContent = `Time: ${this.currentDataView.date.slice(11)}`
     latElement.textContent = `Lat: ${this.currentDataView.centroid_coordinates.lat}`
     lonElement.textContent = `Lon: ${this.currentDataView.centroid_coordinates.lon}`
-
-
 }
 earthNowObj.updatePageInfoByButtonDay = async function(numberOfDays){
     let tempDate = new Date(this.currentDate.getTime())

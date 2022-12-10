@@ -72,22 +72,45 @@ iframe{
   justify-content: center;
 }
 
-.view-holder{
+.earth-now .view-holder{
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-.view-holder > section{
+.earth-now .view-holder > section{
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.view-holder > section img{
+.earth-now .view-holder > section img{
   max-width: 5em;
 }
 
-.active-view{
+.earth-now .active-view{
   border: .2em solid red;
+}
+
+.rover-photos .view-holder{
+  display: flex
+}
+.rover-photos .view-holder > section{
+  padding: 1em;
+}
+.rover-photos .photo-holder{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 80%;
+  justify-content: center;
+}
+.rover-photos .photo-holder > section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rover-photos .photo-holder > section img{
+  padding: .5em;
+  max-width: 8em;
+  max-height: 8em;
 }
 /******************************************
 /* ADDITIONAL STYLES
