@@ -18,13 +18,24 @@ roverPhotosObj.getFetch = async function(url){
         console.warn(error)
     }
 }
+roverPhotosObj.prioritizeCameras = function(){
+    console.log('prioritizing')
+    console.log(this.currentDataSorted)
+    const key = ['fhaz', 'rhaz', 'navcam', 'mast', 'chemcam', 'mahli', 'mardi']
+    for (let i = 0; i < key.length; i++){
+        if (this.currentDataSorted[key[i]]){
+            return key[i]
+        }
+    }
+}
 roverPhotosObj.updateObjData = function(tempDataList){
     let latestOrPhotos = tempDataList.latest_photos || tempDataList.photos
     this.currentDataList = latestOrPhotos
-    this.currentCamera = this.currentDataList[0].camera.name.toLowerCase()
-    this.currentPhoto = this.currentDataList[0]
     this.sortCurrentData()
-
+    console.log(this.currentCamera)
+    this.currentCamera = this.prioritizeCameras()
+    this.currentPhoto = this.currentDataSorted[this.currentCamera][0]
+    console.log(this.currentCamera)
 }
 roverPhotosObj.addPageLinks = function(){
     const calendar = document.querySelector('.calendar')
@@ -87,7 +98,6 @@ roverPhotosObj.updatePageByCalendar = async function(){
 }
 roverPhotosObj.updatePageInfoByButtonDay = async function(numberOfDays){
     let sol = this.currentDataList[0].sol
-    console.log(sol)
     sol = sol + numberOfDays
     const tempDataList = await this.keepFetching(numberOfDays, sol, 0)
     if (tempDataList.photos.length === 0){
@@ -96,7 +106,16 @@ roverPhotosObj.updatePageInfoByButtonDay = async function(numberOfDays){
     } else {
         this.clearError()
     }
-    console.log(tempDataList)
+    this.updateObjData(tempDataList)
+    this.updatePageInfo()
+}
+roverPhotosObj.updatePageByRandom = async function(){
+    let sol = Math.floor(Math.random() * this.todaySol)
+    const apiLink = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${this.apiKey}&sol=${sol}`
+    const tempDataList = await this.getFetch(apiLink)
+    if (tempDataList.photos.length === 0){
+        return this.updatePageByRandom()
+    }
     this.updateObjData(tempDataList)
     this.updatePageInfo()
 }
@@ -114,7 +133,6 @@ roverPhotosObj.keepFetching = async function(numberOfDays, sol, recursionCount){
     } else {
         return tempDataList
     }
-
 }
 roverPhotosObj.updateImageBy = function(numberOfDays){
     if (this.currentPhotoIndex + numberOfDays < 0){
