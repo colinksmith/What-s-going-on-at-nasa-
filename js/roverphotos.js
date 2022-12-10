@@ -6,6 +6,7 @@ roverPhotosObj.currentDataList = null
 roverPhotosObj.currentDataSorted = null
 roverPhotosObj.currentCamera = null
 roverPhotosObj.currentPhoto = null
+roverPhotosObj.currentPhotoIndex = null
 roverPhotosObj.firstSol = 0
 
 roverPhotosObj.getFetch = async function(url){
@@ -66,14 +67,53 @@ roverPhotosObj.addPageLinks = function(){
     rhaz.addEventListener('click', () => this.updateCameraTo('rhaz'))
 
 }
+roverPhotosObj.updateImageBy = function(numberOfDays){
+    if (this.currentPhotoIndex + numberOfDays < 0){
+        this.displayError()
+        return
+    } else if (this.currentPhotoIndex + numberOfDays >= this.currentDataSorted[this.currentCamera].length){
+        this.displayError()
+        return
+    } else {
+        this.clearError()
+    }
+    this.currentPhotoIndex += numberOfDays
+    this.currentPhoto = this.currentDataSorted[this.currentCamera][this.currentPhotoIndex]
+    this.updatePageInfo()
+
+}
 roverPhotosObj.updateCameraTo = function(cameraSelection){
+    if (!this.currentDataSorted[cameraSelection]){
+        this.displayError()
+        return
+    }
+    this.clearError()
     console.log('changing camera selection to ' + cameraSelection)
     this.currentCamera = cameraSelection
     this.appendPhotos()
 }
+
+roverPhotosObj.updatePageInfo = function(){
+    const imgMain = document.querySelector('.img-main')
+    const imgLink = document.querySelector('.img-link')
+    const viewDate = document.querySelector('.arrow-container .today-date')
+
+    const solElement = document.querySelector('.photo-content .sol')
+    const dateElement = document.querySelector('.photo-content .earth-date')
+    const cameraElement = document.querySelector('.photo-content .camera-selection')
+
+    let currentPhotoSrc = this.currentPhoto.img_src
+    imgMain.src = currentPhotoSrc
+    imgLink.href = currentPhotoSrc
+    viewDate.textContent = `Sol: ${this.currentPhoto.sol}`
+    solElement.textContent = `Sol: ${this.currentPhoto.sol}`
+    dateElement.textContent = `Earth date: ${this.currentPhoto.earth_date}`
+    cameraElement.textContent = `Camera: ${this.currentPhoto.camera.full_name}`
+
+    this.appendPhotos()
+}
 roverPhotosObj.appendPhotos = function(){
     const photoHolder = document.querySelector('.photo-holder')
-    console.log(photoHolder)
     photoHolder.replaceChildren(...(this.createPhotos()))
 }
 roverPhotosObj.createPhotos = function(){
@@ -81,7 +121,6 @@ roverPhotosObj.createPhotos = function(){
     for (let i = 0; i < this.currentDataSorted[this.currentCamera].length; i++){
         output.push(this.createPhotoElement(i))
     }
-    console.log(output)
     return output
 }
 roverPhotosObj.createPhotoElement = function(index){
@@ -92,27 +131,18 @@ roverPhotosObj.createPhotoElement = function(index){
     const photoNum = index
 
     section.appendChild(img)
+    section.classList.add(`photo-${index}`)
     img.src = this.currentDataSorted[this.currentCamera][photoNum].img_src
+    img.addEventListener('click', () => this.updatePhoto(index))
     section.appendChild(span)
     span.textContent = index
     return section
 }
-roverPhotosObj.updatePageInfo = function(){
-    const imgMain = document.querySelector('.img-main')
-    const imgLink = document.querySelector('.img-link')
-    const viewDate = document.querySelector('.arrow-container .today-date')
-
-    const solElement = document.querySelector('.photo-content .sol')
-    const dateElement = document.querySelector('.photo-content .earth-date')
-    const cameraElement = document.querySelector('.photo-content .camera-selection')
-
-    let currentViewUrl = this.currentPhoto.img_src
-    imgMain.src = currentViewUrl
-    imgLink.href = currentViewUrl
-    viewDate.textContent = `Sol: ${this.currentPhoto.sol}`
-    solElement.textContent = `Sol: ${this.currentPhoto.sol}`
-    dateElement.textContent = `Earth date: ${this.currentPhoto.earth_date}`
-    cameraElement.textContent = `Camera: ${this.currentPhoto.camera.full_name}`
+roverPhotosObj.updatePhoto = function(index){
+    this.clearError()
+    this.currentPhoto = this.currentDataSorted[this.currentCamera][index]
+    this.currentPhotoIndex = index
+    this.updatePageInfo()
 }
 roverPhotosObj.toggleActiveCameras = function(){
     console.log('toggled cameras')
@@ -130,6 +160,14 @@ roverPhotosObj.sortCurrentData = function(){
     });
     console.log(this.currentDataSorted)
 }
+roverPhotosObj.displayError = function(){
+    let textBox = document.querySelector('.error')
+    textBox.textContent = 'Error, something went wrong with that selection. There may be no picture for that camera or date.'
+}
+roverPhotosObj.clearError = function(){
+    let textBox = document.querySelector('.error')
+    textBox.textContent = ''
+}
 roverPhotosObj.main = async function(){
     const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?${this.apiKey}`
     // const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=3676&${this.apiKey}`
@@ -137,14 +175,13 @@ roverPhotosObj.main = async function(){
     console.log(tempDataList)
     this.updateObjData(tempDataList)
     this.sortCurrentData()
-
     
     this.todaySol = this.currentDataList[0].sol
     this.addPageLinks()
     this.updatePageInfo()
+
     this.toggleActiveCameras()
     this.changeView(this.currentView)
 
-    this.appendPhotos()
 }
 roverPhotosObj.main()
