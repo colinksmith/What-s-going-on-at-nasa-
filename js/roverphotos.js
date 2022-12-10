@@ -21,7 +21,7 @@ roverPhotosObj.getFetch = async function(url){
 roverPhotosObj.prioritizeCameras = function(){
     console.log('prioritizing')
     console.log(this.currentDataSorted)
-    const key = ['fhaz', 'rhaz', 'navcam', 'mast', 'chemcam', 'mahli', 'mardi']
+    const key = ['navcam', 'fhaz', 'rhaz', 'mast', 'chemcam', 'mahli', 'mardi']
     for (let i = 0; i < key.length; i++){
         if (this.currentDataSorted[key[i]]){
             return key[i]
@@ -116,6 +116,7 @@ roverPhotosObj.updatePageByRandom = async function(){
     if (tempDataList.photos.length === 0){
         return this.updatePageByRandom()
     }
+    this.clearError()
     this.updateObjData(tempDataList)
     this.updatePageInfo()
 }
@@ -168,6 +169,14 @@ roverPhotosObj.updatePageInfo = function(){
     const dateElement = document.querySelector('.photo-content .earth-date')
     const cameraElement = document.querySelector('.photo-content .camera-selection')
 
+    const fhazPhotoCount = document.querySelector('.fhaz span + span')
+    const rhazPhotoCount = document.querySelector('.rhaz span + span')
+    const navcamPhotoCount = document.querySelector('.navcam span + span')
+    const mastPhotoCount = document.querySelector('.mast span + span')
+    const chemcamPhotoCount = document.querySelector('.chemcam span + span')
+    const mahliPhotoCount = document.querySelector('.mahli span + span')
+    const mardiPhotoCount = document.querySelector('.mardi span + span')
+
     let currentPhotoSrc = this.currentPhoto.img_src
     imgMain.src = currentPhotoSrc
     imgLink.href = currentPhotoSrc
@@ -175,6 +184,14 @@ roverPhotosObj.updatePageInfo = function(){
     solElement.textContent = `Sol: ${this.currentPhoto.sol}`
     dateElement.textContent = `Earth date: ${this.currentPhoto.earth_date}`
     cameraElement.textContent = `Camera: ${this.currentPhoto.camera.full_name}`
+
+    fhazPhotoCount.textContent = `(${this.currentDataSorted.fhaz ? this.currentDataSorted.fhaz.length : 0})`
+    rhazPhotoCount.textContent = `(${this.currentDataSorted.rhaz ? this.currentDataSorted.rhaz.length : 0})`
+    navcamPhotoCount.textContent = `(${this.currentDataSorted.navcam ? this.currentDataSorted.navcam.length : 0})`
+    mastPhotoCount.textContent = `(${this.currentDataSorted.mast ? this.currentDataSorted.mast.length : 0})`
+    chemcamPhotoCount.textContent = `(${this.currentDataSorted.chemcam ? this.currentDataSorted.chemcam.length : 0})`
+    mahliPhotoCount.textContent = `(${this.currentDataSorted.mahli ? this.currentDataSorted.mahli.length : 0})`
+    mardiPhotoCount.textContent = `(${this.currentDataSorted.mardi ? this.currentDataSorted.mardi.length : 0})`
 
     this.appendPhotos()
 }
@@ -207,7 +224,7 @@ roverPhotosObj.createPhotoElement = function(index){
     img.src = this.currentDataSorted[this.currentCamera][photoNum].img_src
     img.addEventListener('click', () => this.updatePhoto(index))
     section.appendChild(span)
-    span.textContent = index
+    span.textContent = index + 1
     return section
 }
 roverPhotosObj.sortCurrentData = function(){
@@ -230,7 +247,6 @@ roverPhotosObj.clearError = function(){
 }
 roverPhotosObj.main = async function(){
     const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?${this.apiKey}`
-    // const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=3676&${this.apiKey}`
     tempDataList = await this.getFetch(url)
     console.log(tempDataList)
     this.updateObjData(tempDataList)
