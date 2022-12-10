@@ -53,8 +53,8 @@ roverPhotosObj.addPageLinks = function(){
     rightArrow.addEventListener('click', () => this.updatePageInfoByButtonDay(1)) 
     leftArrowMonth.addEventListener('click', () => this.updatePageInfoByButtonDay(-30))
     rightArrowMonth.addEventListener('click', () => this.updatePageInfoByButtonDay(30))
-    leftArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(-365))
-    rightArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(365))
+    leftArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(-355))
+    rightArrowYear.addEventListener('click', () => this.updatePageInfoByButtonDay(355))
     randomButton.addEventListener('click', () => this.updatePageByRandom())
 
     leftImageSelection.addEventListener('click', () => this.updateImageBy(-1))
@@ -85,7 +85,35 @@ roverPhotosObj.updatePageByCalendar = async function(){
     this.updateObjData(tempDataList)
     this.updatePageInfo()
 }
-roverPhotosObj.updatePageInfoByButtonDay = async function(){
+roverPhotosObj.updatePageInfoByButtonDay = async function(numberOfDays){
+    let sol = this.currentDataList[0].sol
+    console.log(sol)
+    sol = sol + numberOfDays
+    const tempDataList = await this.keepFetching(numberOfDays, sol, 0)
+    if (tempDataList.photos.length === 0){
+        this.displayError()
+        return
+    } else {
+        this.clearError()
+    }
+    console.log(tempDataList)
+    this.updateObjData(tempDataList)
+    this.updatePageInfo()
+}
+roverPhotosObj.keepFetching = async function(numberOfDays, sol, recursionCount){
+    if (recursionCount >= 7){
+        return {photos: []}
+    }
+    const modifier = numberOfDays > 0 ? 1 : -1
+    modifiedSol = sol + modifier * recursionCount
+    console.log(modifiedSol)
+    const apiLink = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${this.apiKey}&sol=${modifiedSol}`
+    const tempDataList = await this.getFetch(apiLink)
+    if (tempDataList.photos.length === 0){
+        return this.keepFetching(numberOfDays, sol, ++recursionCount)
+    } else {
+        return tempDataList
+    }
 
 }
 roverPhotosObj.updateImageBy = function(numberOfDays){
