@@ -723,7 +723,7 @@
 		background-attachment: fixed;
 		color: #fff;
 		text-align: center;
-		padding: 7.5em 0 2em 0;
+		padding: 6em 0 2em 0;
 		cursor: default;
 		display: flex;
 		flex-direction: column;
@@ -1766,16 +1766,52 @@
 	#iframe{
 		width: 88.88vh;
 	}
+
+	.inner .active-media{
+		object-fit: contain;
+		display: inline-block;
+		max-height: 50vh;
+		max-width: 100%;
+		height: 50vh;
+		width: auto;
+		border-radius: 0;
+	}
+	.inner .hidden-media{
+		display: none;
+	}
 }
-#header .inner .active-media{
-	object-fit: contain;
-	display: inline-block;
-	max-height: 50vh;
-	max-width: 100%;
-	height: 50vh;
-	width: auto;
-	border-radius: 0;
-}
-#header .inner .hidden-media{
-	display: none;
+
+#page-wrapper.earth-wrapper{
+
+	.main-content-holder{
+		margin-bottom: 1em;
+	}
+	#header{
+		height: auto;
+	}
+	.inner{
+		padding-top: 3em;
+	}
+	.view-holder{
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 1em;
+
+		section{
+			margin-bottom: 0;
+		}
+	}
+	.img-link{
+		border: none;
+	}
+	.img-main{
+		width: auto;
+		max-height: 75vh;
+	}
+	.coords-content{
+		display: flex;
+		flex-direction: column;
+		line-height: 1.2em;
+	}
+
 }
