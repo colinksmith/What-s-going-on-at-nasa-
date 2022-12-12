@@ -1,0 +1,6 @@
+fix earthnow view sections - widescreen does not have time under image
+    views also needs wrapping for dates with many view, eg 2017-06-27
+index needs buttons moved up for small screens
+fade in fades in twice for some reason?
+remove default image hrefs, text that gets changed by js
+make paragraph bigger on potd
