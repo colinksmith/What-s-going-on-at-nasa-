@@ -115,12 +115,12 @@
 		font-weight: 300;
 
 		// Stops initial animations until page loads.
-			&.is-preload {
-				*, *:before, *:after {
-					@include vendor('animation', 'none !important');
-					@include vendor('transition', 'none !important');
-				}
-			}
+			// &.is-preload {
+			// 	*, *:before, *:after {
+			// 		@include vendor('animation', 'none !important');
+			// 		@include vendor('transition', 'none !important');
+			// 	}
+			// }
 
 	}
 
@@ -133,7 +133,7 @@
 
 	h1, h2, h3, h4, h5, h6 {
 		font-weight: 400;
-		color: #483949;
+		color: white;
 		line-height: 1.25em;
 	}
 
@@ -723,7 +723,7 @@
 		background-attachment: fixed;
 		color: #fff;
 		text-align: center;
-		padding: 6em 0 2em 0;
+		padding: 4em 0 2em 0;
 		cursor: default;
 		display: flex;
 		flex-direction: column;
@@ -747,7 +747,7 @@
 			vertical-align: middle;
 			box-sizing: content-box;
 			padding: 3em;
-			padding-top: 6em;
+			padding-top: 4em;
 			background: rgba($color: #000000, $alpha: .75);
 			border-radius: 3em;
 			
@@ -1727,9 +1727,17 @@
 	display: flex;
 	flex-direction: row;
 	margin-bottom: 1em;
+	gap: 1em;
 
 	section{
 		margin-bottom: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		
+		span{
+
+		}
 	}
 }
 
@@ -1815,6 +1823,12 @@
 		flex-direction: column;
 		line-height: 1.2em;
 	}
+	.active-view{
+
+		img{
+			width: 4em;
+		}
+	}
 }
 #page-wrapper.rover-wrapper{
 	
@@ -1854,7 +1868,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
-		gap: .5em;
+		gap: 1em;
 
 		> section {
 			display: flex;
@@ -1871,5 +1885,8 @@
 		display: flex;
 		flex-direction: column;
 	}
+	.active-view{
+		transform: scale(1.2)
 
+	}
 }

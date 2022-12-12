@@ -204,6 +204,15 @@ roverPhotosObj.updatePhoto = function(index){
 roverPhotosObj.appendPhotos = function(){
     const photoHolder = document.querySelector('.photo-holder')
     photoHolder.replaceChildren(...(this.createPhotos()))
+    const currentActiveSection = document.querySelector('.active-view')
+    if (currentActiveSection){
+        currentActiveSection.classList.remove('active-view')
+    }
+    if (document.querySelector(`.photo-${this.currentPhotoIndex}`)){
+        this.currentPhotoIndex = 0
+    }
+    console.log(this.currentPhotoIndex)
+    document.querySelector(`.photo-${this.currentPhotoIndex}`).classList.add('active-view')
 }
 roverPhotosObj.createPhotos = function(){
     const output = []
@@ -250,6 +259,7 @@ roverPhotosObj.main = async function(){
     tempDataList = await this.getFetch(url)
     console.log(tempDataList)
     this.updateObjData(tempDataList)
+    this.currentPhotoIndex = 0
     
     this.todaySol = this.currentDataList[0].sol
     this.todayEarthDate = this.currentDataList[0].earth_date
