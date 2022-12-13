@@ -19,8 +19,6 @@ roverPhotosObj.getFetch = async function(url){
     }
 }
 roverPhotosObj.prioritizeCameras = function(){
-    console.log('prioritizing')
-    console.log(this.currentDataSorted)
     const key = ['navcam', 'fhaz', 'rhaz', 'mast', 'chemcam', 'mahli', 'mardi']
     for (let i = 0; i < key.length; i++){
         if (this.currentDataSorted[key[i]]){
@@ -32,10 +30,10 @@ roverPhotosObj.updateObjData = function(tempDataList){
     let latestOrPhotos = tempDataList.latest_photos || tempDataList.photos
     this.currentDataList = latestOrPhotos
     this.sortCurrentData()
-    console.log(this.currentCamera)
     this.currentCamera = this.prioritizeCameras()
-    this.currentPhoto = this.currentDataSorted[this.currentCamera][0]
-    console.log(this.currentCamera)
+    this.currentPhotoIndex = 0
+    this.currentPhoto = this.currentDataSorted[this.currentCamera][this.currentPhotoIndex]
+
 }
 roverPhotosObj.addPageLinks = function(){
     const calendar = document.querySelector('.calendar')
@@ -83,7 +81,6 @@ roverPhotosObj.addPageLinks = function(){
 roverPhotosObj.updatePageByCalendar = async function(){
     const calendar = document.querySelector('.calendarInput')
     let date = calendar.value || this.todayEarthDate
-    console.log(date)
     const apiLink = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${this.apiKey}&earth_date=${date}`
     tempDataList = await this.getFetch(apiLink)
     if (tempDataList.photos.length === 0){
@@ -92,7 +89,6 @@ roverPhotosObj.updatePageByCalendar = async function(){
     } else {
         this.clearError()
     }
-    console.log(tempDataList)
     this.updateObjData(tempDataList)
     this.updatePageInfo()
 }
@@ -126,7 +122,6 @@ roverPhotosObj.keepFetching = async function(numberOfDays, sol, recursionCount){
     }
     const modifier = numberOfDays > 0 ? 1 : -1
     modifiedSol = sol + modifier * recursionCount
-    console.log(modifiedSol)
     const apiLink = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?${this.apiKey}&sol=${modifiedSol}`
     const tempDataList = await this.getFetch(apiLink)
     if (tempDataList.photos.length === 0){
@@ -156,7 +151,6 @@ roverPhotosObj.updateCameraTo = function(cameraSelection){
         return
     }
     this.clearError()
-    console.log('changing camera selection to ' + cameraSelection)
     this.currentCamera = cameraSelection
     this.appendPhotos()
 }
@@ -194,6 +188,12 @@ roverPhotosObj.updatePageInfo = function(){
     mardiPhotoCount.textContent = `(${this.currentDataSorted.mardi ? this.currentDataSorted.mardi.length : 0})`
 
     this.appendPhotos()
+    
+    const currentActiveSection = document.querySelector('.active-view')
+    if (currentActiveSection){
+        currentActiveSection.classList.remove('active-view')
+    }
+    document.querySelector(`.photo-${this.currentPhotoIndex}`).classList.add('active-view')
 }
 roverPhotosObj.updatePhoto = function(index){
     this.clearError()
@@ -204,15 +204,6 @@ roverPhotosObj.updatePhoto = function(index){
 roverPhotosObj.appendPhotos = function(){
     const photoHolder = document.querySelector('.photo-holder')
     photoHolder.replaceChildren(...(this.createPhotos()))
-    const currentActiveSection = document.querySelector('.active-view')
-    if (currentActiveSection){
-        currentActiveSection.classList.remove('active-view')
-    }
-    if (document.querySelector(`.photo-${this.currentPhotoIndex}`)){
-        this.currentPhotoIndex = 0
-    }
-    console.log(this.currentPhotoIndex)
-    document.querySelector(`.photo-${this.currentPhotoIndex}`).classList.add('active-view')
 }
 roverPhotosObj.createPhotos = function(){
     const output = []
@@ -244,7 +235,6 @@ roverPhotosObj.sortCurrentData = function(){
         }
         this.currentDataSorted[element.camera.name.toLowerCase()].push(element)
     });
-    console.log(this.currentDataSorted)
 }
 roverPhotosObj.displayError = function(){
     let textBox = document.querySelector('.error')
@@ -257,7 +247,6 @@ roverPhotosObj.clearError = function(){
 roverPhotosObj.main = async function(){
     const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/latest_photos?${this.apiKey}`
     tempDataList = await this.getFetch(url)
-    console.log(tempDataList)
     this.updateObjData(tempDataList)
     this.currentPhotoIndex = 0
     
