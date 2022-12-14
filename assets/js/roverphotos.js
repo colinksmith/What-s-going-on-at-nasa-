@@ -222,6 +222,7 @@ roverPhotosObj.createPhotoElement = function(index){
     section.appendChild(img)
     section.classList.add(`photo-${index}`)
     img.src = this.currentDataSorted[this.currentCamera][photoNum].img_src
+    img.alt = `Rover photo from ${this.currentCamera} camera, number ${photoNum + 1}`
     img.addEventListener('click', () => this.updatePhoto(index))
     section.appendChild(span)
     span.textContent = index + 1

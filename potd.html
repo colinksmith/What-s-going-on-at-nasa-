@@ -4,11 +4,12 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
+<html lang="en">
 	<head>
 		<title>Photo of the Day</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="A web page that gets the latest NASA picture of the day, and presents them to you to view at your leisure.">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="images/NASA-Logo-Large.png"/>
 		<link rel="stylesheet" href="assets/css/output/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/output/noscript.css" /></noscript>
@@ -23,11 +24,11 @@
 						<div class="inner">
 							<header>
 								<h1 class="potd-title"></h1>
-								<h3><span class="header-date"></span></h3>
+								<h2><span class="header-date"></span></h2>
 							</header>
 							<section class="inner-section">
-								<a class="img-link" target="_blank" rel="noopener noreferrer">
-									<img class="img-main active-media">
+								<a class="img-link" target="_blank" rel="noopener noreferrer" aria-label="See this photo in high resolution">
+									<img class="img-main active-media" alt="The current photo of the day.">
 								</a>
 								<iframe id="iframe" class="hidden-media" src="" frameborder="0"></iframe>
 								<nav class="arrow-container">
@@ -41,7 +42,7 @@
 								</nav>
 								<section>
 									<button class='random' type="button" name="random-button">Random date</button>
-									<input class='calendarInput' type="date" name="" value="">
+									<input class='calendarInput' type="date" name="" value="" aria-label="Calendar selection">
 									<button class='calendar' type="button" name="button">Get date</button>
 								</section>
 								<p class="potd-text"></p>
