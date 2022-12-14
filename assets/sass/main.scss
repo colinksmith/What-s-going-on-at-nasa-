@@ -1846,11 +1846,14 @@
 			}
 		}
 	}
-
+	.main-content-holder a {
+		border-bottom: none;
+	}
 	.img-main{
 		width: auto;
 		max-height: 65vh;
 		max-width: 100%;
+
 	}
 	.inner img{
 		border-radius: 0;

@@ -2630,6 +2630,9 @@ body.homepage.is-preload #header:after {
 #page-wrapper.rover-wrapper #header .inner {
   padding-top: 0;
 }
+#page-wrapper.rover-wrapper .main-content-holder a {
+  border-bottom: none;
+}
 #page-wrapper.rover-wrapper .img-main {
   width: auto;
   max-height: 65vh;
