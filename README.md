@@ -1,4 +1,4 @@
-# My Awesome Project
+# What's Going on at NASA? An API project.
 A small website that takes data fromNASA API's, and showing that data in a fun and interesting way. It links to the astronomy picture of the day, EPIC's global photos of earth, and recent rover photos from the Curiosity rover. An emphasis is placed on the most recent imagery, as I don't think it's well known that NASA publishes new photos almost daily.
 
 **Link to project:** http://recruiters-love-seeing-live-demos.com/
