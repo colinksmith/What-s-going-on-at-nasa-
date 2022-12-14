@@ -4,11 +4,12 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-<html>
+<html lang="en">
 	<head>
 		<title>Earth, Now</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="A web page that gets the latest photos of Earth, from NASA's EPIC camera, and presents them to you to view at your leisure.">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="images/NASA-Logo-Large.png"/>
 		<link rel="stylesheet" href="assets/css/output/main.css" />
 		<noscript><link rel="stylesheet" href="assets/css/output/noscript.css" /></noscript>
@@ -26,8 +27,8 @@
 							</header>
                             <section class="inner-section">
                                 <section class="main-content-holder">
-                                    <a class="img-link" target="_blank" rel="noopener noreferrer">
-                                        <img class="active-media img-main">
+                                    <a class="img-link" target="_blank" rel="noopener noreferrer" aria-label="See this photo in high resolution">
+                                        <img class="active-media img-main" alt="A large photo of Earth from space">
                                     </a>
                                     <section class="coords-content">
                                         <span class="date"></span>
@@ -50,7 +51,7 @@
                                 <span class="error"></span>
                                 <section>
                                     <button class='random' type="button" name="random-button">Random</button>
-                                    <input class='calendarInput' type="date" name="" value="">
+                                    <input class='calendarInput' type="date" name="" value="" aria-label="Calendar selection">
                                     <button class='calendar' type="button" name="button">Pick a date</button>
                                 </section>
                             </section>
