@@ -2563,7 +2563,7 @@ body.homepage.is-preload #header:after {
 }
 @keyframes fadeInAnimation {
   0% {
-    opacity: 0;
+    opacity: 0.01;
   }
   100% {
     opacity: 1;
@@ -2579,6 +2579,9 @@ body.homepage.is-preload #header:after {
 #page-wrapper.potd-wrapper #header {
   height: auto;
   padding-top: 2em;
+}
+#page-wrapper.potd-wrapper #header h2 {
+  font-size: 1.5em;
 }
 #page-wrapper.potd-wrapper .inner a.img-link {
   width: auto;
@@ -2629,6 +2632,9 @@ body.homepage.is-preload #header:after {
 }
 #page-wrapper.rover-wrapper #header .inner {
   padding-top: 0;
+}
+#page-wrapper.rover-wrapper .main-content-holder a {
+  border-bottom: none;
 }
 #page-wrapper.rover-wrapper .img-main {
   width: auto;

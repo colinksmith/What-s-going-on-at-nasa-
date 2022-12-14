@@ -1747,7 +1747,7 @@
 	animation-fill-mode: forwards;
 	@keyframes fadeInAnimation{
 		0% {
-			opacity: 0;
+			opacity: 0.01;
 		}
 		100% {
 			opacity: 1;
@@ -1768,6 +1768,10 @@
 	#header{
 		height: auto;
 		padding-top: 2em;
+
+		h2 {
+			font-size: 1.5em;
+		}
 	}
 
 	.inner a.img-link{
@@ -1846,11 +1850,14 @@
 			}
 		}
 	}
-
+	.main-content-holder a {
+		border-bottom: none;
+	}
 	.img-main{
 		width: auto;
 		max-height: 65vh;
 		max-width: 100%;
+
 	}
 	.inner img{
 		border-radius: 0;

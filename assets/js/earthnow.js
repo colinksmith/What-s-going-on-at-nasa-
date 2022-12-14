@@ -156,6 +156,7 @@ earthNowObj.createViewSection = function(index){
     aEle.appendChild(imgEle)
     const apiDateFormat = `${earthNowObj.currentDate.getFullYear()}/${String(earthNowObj.currentDate.getMonth() + 1).padStart(2, '0')}/${String(earthNowObj.currentDate.getDate()).padStart(2, '0')}`
     imgEle.src = `https://api.nasa.gov/EPIC/archive/natural/${apiDateFormat}/jpg/${this.currentDataList[viewNum].image}.jpg?${this.apiKey}`
+    imgEle.alt = `View of the Earth #${viewNum + 1}, from the time: ${this.currentDataList[viewNum].date.slice(11)}`
     imgEle.addEventListener('click', () => this.changeView(viewNum))
     
     section.appendChild(spanEle)
