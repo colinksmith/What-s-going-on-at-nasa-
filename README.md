@@ -3,7 +3,8 @@ A small website that takes data fromNASA API's, and showing that data in a fun a
 
 **Link to project:** https://whatsgoingonatnasa.netlify.app/
 
-![alt tag](http://placecorgi.com/1200/650)
+![alt tag](https://user-images.githubusercontent.com/88501518/210228943-bd5838c0-f829-41a8-8515-cd299486e8c9.jpg)
+
 
 ## How It's Made:
 
