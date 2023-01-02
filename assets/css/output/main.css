@@ -2677,7 +2677,7 @@ body.homepage.is-preload #header:after {
   transform: scale(1.2);
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 736px) {
   #header .button-holder {
     flex-direction: column;
   }
