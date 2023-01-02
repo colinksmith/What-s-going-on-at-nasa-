@@ -1,9 +1,10 @@
-# My Awesome Project
+# What's Going on at NASA? An API project.
 A small website that takes data fromNASA API's, and showing that data in a fun and interesting way. It links to the astronomy picture of the day, EPIC's global photos of earth, and recent rover photos from the Curiosity rover. An emphasis is placed on the most recent imagery, as I don't think it's well known that NASA publishes new photos almost daily.
 
-**Link to project:** http://recruiters-love-seeing-live-demos.com/
+**Link to project:** https://whatsgoingonatnasa.netlify.app/
 
-![alt tag](http://placecorgi.com/1200/650)
+![alt tag](https://user-images.githubusercontent.com/88501518/210228943-bd5838c0-f829-41a8-8515-cd299486e8c9.jpg)
+
 
 ## How It's Made:
 
@@ -27,5 +28,5 @@ Some of the styling could be improved of course, but that wasn't the goal of thi
 
 I definitely felt like I learned how powerful public API's are, and how much fun infomation you can get from what's out there, right now, for free. And yet I also found the limitations of it, sometimes there was just 1 or 2 things about the data that I wish there were to make it a little more interesting, or some info would be in one endpoint but not another and the data was organized differently so it was challenging to access that information without working with a completely different object. It showed me how powerful a back-end and using one's own data can be, and how it can simplify many things on the front end.
 
-As I mentioned before I feel I got more skilled in object oriented programming throughout this project. I noticed repeating patterns, and if I really wanted to, I could probably reorganize the whole thing as a few classes and subclasses to really make the code readable and satisfying to see execute. I see the potential for it in a much bigger way now. 
+As I mentioned before I feel I got more skilled in object oriented programming throughout this project. I noticed repeating patterns, and if I really wanted to, I could probably reorganize the whole thing as a few classes and subclasses to really make the code readable and satisfying to see execute. I see the potential for OOP in a much bigger way now. 
 
